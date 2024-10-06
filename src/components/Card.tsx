@@ -26,9 +26,11 @@ const Card: React.FC<CardProps> = ({ card, columnId }) => {
           <button onClick={handleSave} className='updateBtn'>Save</button>
         </>
       ) : (
-        <p onClick={() => setIsEditing(true)}>{card.text}</p>
+        <>
+          <p onClick={() => setIsEditing(true)}>{card.text}</p>
+          <button onClick={() => deleteCard(columnId, card.id)}>Delete</button>
+        </>
       )}
-      <button onClick={() => deleteCard(columnId, card.id)}>Delete</button>
     </div>
   );
 };
