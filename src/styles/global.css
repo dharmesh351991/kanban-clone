@@ -1,3 +1,9 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
 .kanban-board-wrap {
     display: flex;
     flex-wrap: wrap;
@@ -125,10 +131,6 @@
     border-radius: 4px;
     cursor: pointer;
   }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
   .react-beautiful-dnd-draggable {
     transition: transform 0.2s;
   }
@@ -137,17 +139,15 @@
     margin-bottom: 12px;
     border-radius: 8px;
     background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Apply a soft shadow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
   
   .taskCard:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Shadow on hover */
-    transform: translateY(-2px); /* Slight hover lift */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
   
   .taskCard.isDragging {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25); /* Increase shadow when dragging */
-    transform: translateY(-3px); /* Lift more during drag */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px);
   }
