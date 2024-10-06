@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Card from './Card';
 import { Column as ColumnType } from '../types';
 import { useKanban } from '../KanbanContext';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Draggable } from 'react-beautiful-dnd';
 
 interface ColumnProps {
   column: ColumnType;
@@ -22,34 +22,29 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
 
   return (
     <div className="column">
-      <Droppable droppableId={column.id}>
-        {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
-            {column.cards.map((card, index) => (
-              <Draggable key={card.id} draggableId={card.id} index={index}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={{
-                      userSelect: 'none',
-                      padding: '16px',
-                      marginBottom: '8px',
-                      backgroundColor: 'white',
-                      border: '1px solid black',
-                      ...provided.draggableProps.style
-                    }}
-                  >
-                    <Card key={card.id} card={card} columnId={column.id} />
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+      <div className="myCards">
+        {column.cards.map((card, index) => (
+          <Draggable key={card.id} draggableId={card.id} index={index}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                style={{
+                  userSelect: 'none',
+                  padding: '16px',
+                  marginBottom: '8px',
+                  backgroundColor: snapshot.isDragging ? '#f4f4f4' : 'white',
+                  border: '1px solid black',
+                  ...provided.draggableProps.style,
+                }}
+              >
+                <Card key={card.id} card={card} columnId={column.id} />
+              </div>
+            )}
+          </Draggable>
+        ))}
+      </div>
       <div className="add-card">
         <input
           value={newCardText}

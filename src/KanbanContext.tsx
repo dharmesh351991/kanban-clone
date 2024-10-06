@@ -18,17 +18,20 @@ const dummyData: Column[] = [
   {
     id: '1',
     title: 'To Do',
-    cards: [{ id: 'c1', text: 'Learn React', status: 'todo' }]
+    cards: [{ id: 'c1', text: 'Learn React', status: 'todo', columnId: '1' }] 
   },
   {
     id: '2',
     title: 'In Progress',
-    cards: [{ id: 'c2', text: 'Build Kanban App', status: 'in-progress' }]
+    cards: [
+      { id: 'c2', text: 'Build Kanban App', status: 'in-progress', columnId: '2' },
+      { id: 'c21', text: 'Build Kanban App New', status: 'in-progress', columnId: '2' }
+    ]
   },
   {
     id: '3',
     title: 'Done',
-    cards: [{ id: 'c3', text: 'Understand TypeScript', status: 'done' }]
+    cards: [{ id: 'c3', text: 'Understand TypeScript', status: 'done', columnId: '3' }]
   }
 ];
 
@@ -36,7 +39,7 @@ export const KanbanProvider = ({ children }: { children: ReactNode }) => {
   const [columns, setColumns] = useState<Column[]>(dummyData);
 
   const addCard = (columnId: string, text: string) => {
-    const newCard: CardProp = { id: Date.now().toString(), text, status: 'todo' };
+    const newCard: CardProp = { id: Date.now().toString(), text, status: 'todo', columnId };
     setColumns((prevColumns) =>
       prevColumns.map((col) =>
         col.id === columnId ? { ...col, cards: [...col.cards, newCard] } : col
@@ -96,35 +99,83 @@ export const KanbanProvider = ({ children }: { children: ReactNode }) => {
     };
     setColumns((prevColumns) => [...prevColumns, newColumn]);
   };
-
   const onDragEnd = (result: any) => {
     const { source, destination } = result;
-
+  
+    // If there's no destination, return early
     if (!destination) return;
-
+  
+    // If the card is dropped in the same place, return early
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+  
     const sourceCol = columns.find(col => col.id === source.droppableId);
     const destCol = columns.find(col => col.id === destination.droppableId);
-    
+  
     if (sourceCol && destCol) {
       const sourceCards = [...sourceCol.cards];
-      const [movedCard] = sourceCards.splice(source.index, 1);
-      const destCards = [...destCol.cards];
-
-      destCards.splice(destination.index, 0, movedCard);
-
-      setColumns((prevColumns) =>
-        prevColumns.map(col => {
-          if (col.id === source.droppableId) {
-            return { ...col, cards: sourceCards };
-          }
-          if (col.id === destination.droppableId) {
-            return { ...col, cards: destCards };
-          }
-          return col;
-        })
-      );
+      const [movedCard] = sourceCards.splice(source.index, 1); // Remove card from source
+  
+      // Check if it's the same column
+      if (sourceCol === destCol) {
+        // Reorder cards in the same column
+        sourceCards.splice(destination.index, 0, movedCard);
+        setColumns((prevColumns) =>
+          prevColumns.map((col) =>
+            col.id === source.droppableId ? { ...col, cards: sourceCards } : col
+          )
+        );
+      } else {
+        // Move card to a different column
+        const destCards = [...destCol.cards];
+        destCards.splice(destination.index, 0, movedCard); // Add card to destination
+  
+        setColumns((prevColumns) =>
+          prevColumns.map((col) => {
+            if (col.id === source.droppableId) {
+              return { ...col, cards: sourceCards };
+            }
+            if (col.id === destination.droppableId) {
+              return { ...col, cards: destCards };
+            }
+            return col;
+          })
+        );
+      }
     }
   };
+  // const onDragEnd = (result: any) => {
+  //   const { source, destination } = result;
+
+  //   if (!destination) return;
+
+  //   const sourceCol = columns.find(col => col.id === source.droppableId);
+  //   const destCol = columns.find(col => col.id === destination.droppableId);
+    
+  //   if (sourceCol && destCol) {
+  //     const sourceCards = [...sourceCol.cards];
+  //     const [movedCard] = sourceCards.splice(source.index, 1);
+  //     const destCards = [...destCol.cards];
+
+  //     destCards.splice(destination.index, 0, movedCard);
+
+  //     setColumns((prevColumns) =>
+  //       prevColumns.map(col => {
+  //         if (col.id === source.droppableId) {
+  //           return { ...col, cards: sourceCards };
+  //         }
+  //         if (col.id === destination.droppableId) {
+  //           return { ...col, cards: destCards };
+  //         }
+  //         return col;
+  //       })
+  //     );
+  //   }
+  // };
 
   return (
     <KanbanContext.Provider value={{ columns, addCard, editCard, deleteCard, moveCard, addColumn, onDragEnd }}>
