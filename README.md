@@ -1,46 +1,76 @@
-# Getting Started with Create React App
+# Trello Kanban Demo Assignment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This project is a simple **Kanban Board demo** built with **React, TypeScript, and Context API**. The app supports core Kanban functionalities such as creating columns and cards, drag-and-drop functionality, moving cards between columns, editing and deleting cards, and persisting state across components.
 
-In the project directory, you can run:
 
-### `npm start`
+# Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+ ```c# src/
+│
+├── components/
+│   ├── Card.tsx
+│   ├── Column.tsx
+│   └── KanbanBoard.tsx
+│
+├── styles/
+│   └── global.css
+│
+├── KanbanContext.tsx
+├── types.ts
+└── App.tsx
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Data Structure used
 
-### `npm test`
+We used an array of `Column` objects where each `Column` contains an array of `Card` objects. Each card has an `id`, `text`, `status`, and `columnId` to identify which column it belongs to.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The project utilizes structured interfaces to manage data effectively:
 
-### `npm run build`
+```typescript
+interface Column {
+  id: string;
+  title: string;
+  cards: CardProp[];
+}
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+interface CardProp {
+  id: string;
+  text: string;
+  status: 'todo' | 'in-progress' | 'done';
+  columnId: string;
+}
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Featrue
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Drag and Drop:** Use of `react-beautiful-dnd` to drag and drop cards between columns.
+- **Card Management:** Add, edit, move, and delete cards within columns.
+- **Context API:** Manage state globally for columns and cards.
+- **TypeScript Integration:** Typed data structure and components to ensure type safety.
 
-### `npm run eject`
+# Dependencies
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Here are the key dependencies used in this project:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```json
+"dependencies": {
+  "react": "^18.3.1",
+  "react-dom": "^18.3.1",
+  "react-beautiful-dnd": "^13.1.1",
+  "typescript": "^4.9.5"
+},
+"devDependencies": {
+  "@types/react": "^18.3.11",
+  "@types/react-beautiful-dnd": "^13.1.8"
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+# How to Run
+- Clone the repository URL : `https://dharmesh351991@github.com/dharmesh351991/kanban-clone.git`.
+- Install dependencies with `npm install`.
+- Run the app with `npm start`.
+- The app should now be running on `http://localhost:3000`.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
